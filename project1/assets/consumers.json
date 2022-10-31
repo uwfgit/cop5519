@@ -1,0 +1,11 @@
+[
+    {
+        "name": "Peter",
+        "initial amount": "230",
+        "recurring monthly payments (employer)": "12",
+        "recurring monthly Payments (employee)": "23",
+        "interest rate": "0.08",
+        "total number of years": "20",
+        "future value": "nan"
+    }
+]
