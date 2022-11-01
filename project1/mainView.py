@@ -2,7 +2,10 @@ import tkinter as tk
 from tkinter import *
 from db import db
 from enum import Enum
+import numpy as np
 import numpy_financial as npf
+import pandas as pd
+
 
 
 class EntryFrame(tk.Frame):
@@ -16,6 +19,7 @@ class EntryFrame(tk.Frame):
         self.totalMonthlyPmt = None
         self.initialA = None
         self.futureValue = None
+        self.export_to = None
         self.inRateDict = {0: "8", 1: "10"}
         self.numYrDict = {0: "10", 1: "20"}
         self.f1 = tk.Frame(root, width=300, height=370)
@@ -69,6 +73,7 @@ class EntryFrame(tk.Frame):
         self.radio_button_option(self.numYrDict, self.optionVarY, 155, 366)
         tk.Label(self.f1, textvariable=self.status).grid(row=8, column=2, pady=15)
         tk.Button(self.f3, text='Calculate', command=self.show_result_final, border=0, borderwidth=0).grid(row=0, padx=20, pady=40)
+        tk.Button(self.f3, text='Export', command=self.pull_data, border=0, borderwidth=0).grid(row=0, column=1, padx=10, pady=40)
 
     def show_result_live(self):
         tk.Label(self.f2).grid(row=0, pady=10)
@@ -108,13 +113,16 @@ class EntryFrame(tk.Frame):
         db.insert_records(consumer_info)
         db.write_into()
 
+    def pull_data(self):
+        self.export_to = db.export_to()
+        self.status.set('Exported Successfully')
+
     def calculation(self):
-        self.interestR = float(self.inRateDict[self.optionVarI.get()]) / 100
-        self.comFrequency = 12
-        self.numOY = self.numYrDict[self.optionVarY.get()]
-        self.totalMonthlyPmt = '%.2f' % ((float(self.pmtEmperMonthly.get()) + float(self.pmtEmpeeMonthly.get())) * 12)
-        self.initialA = float(self.initialAmount.get())
-        # FIXME: need to get the right function
-        self.futureValue = npf.irr([self.interestR / self.comFrequency, self.numOY * self.comFrequency, self.totalMonthlyPmt, self.initialA])
+        self.interestR = np.asarray(float(self.inRateDict[self.optionVarI.get()]) / 100, dtype='float64')
+        self.comFrequency = np.asarray(12, dtype='float64')
+        self.numOY = np.asarray(self.numYrDict[self.optionVarY.get()], dtype='float64')
+        self.totalMonthlyPmt = np.asarray('%.2f' % ((float(self.pmtEmperMonthly.get()) + float(self.pmtEmpeeMonthly.get())) * 12), dtype='float64')
+        self.initialA = np.asarray(self.initialAmount.get(), dtype='float64')
+        self.futureValue = npf.fv(self.interestR / self.comFrequency, self.numOY * self.comFrequency, self.totalMonthlyPmt, self.initialA)
         self.finalFutureValue.set(str(round(self.futureValue, 2)))
         self.record_info()
