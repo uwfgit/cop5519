@@ -1,11 +1,20 @@
 [
     {
-        "name": "Peter",
-        "initial amount": "230",
-        "recurring monthly payments (employer)": "12",
+        "name": "max",
+        "initial amount": "24",
+        "recurring monthly payments (employer)": "5",
         "recurring monthly Payments (employee)": "23",
-        "interest rate": "0.08",
-        "total number of years": "20",
-        "future value": "nan"
+        "interest rate": "0.1",
+        "total number of years": "10",
+        "future value": "-68892.88"
+    },
+    {
+        "name": "max",
+        "initial amount": "-24",
+        "recurring monthly payments (employer)": "-5",
+        "recurring monthly Payments (employee)": "-23",
+        "interest rate": "0.1",
+        "total number of years": "10",
+        "future value": "68892.88"
     }
 ]
